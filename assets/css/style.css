@@ -676,6 +676,60 @@ a:hover {
     text-decoration: underline;
 }
 
+/* RSS Subscription Styles */
+.rss-subscription {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.rss-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 30px;
+    background: linear-gradient(135deg, #f26522, #ff9966);
+    color: white;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(242, 101, 34, 0.3);
+}
+
+.rss-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(242, 101, 34, 0.5);
+    color: white;
+}
+
+.rss-button svg {
+    flex-shrink: 0;
+}
+
+.rss-note {
+    font-size: 0.85rem;
+    color: rgba(244, 244, 244, 0.5);
+    margin-top: 20px;
+}
+
+/* Telegram Social Link */
+.social-link.telegram {
+    background: linear-gradient(135deg, #0088cc, #00aaff);
+}
+
+.social-link.telegram:hover {
+    background: linear-gradient(135deg, #006699, #0088cc);
+}
+
+/* RSS Platform Link */
+.platform-link.rss {
+    background: linear-gradient(135deg, #f26522, #ff9966);
+}
+
+.platform-link.rss:hover {
+    background: linear-gradient(135deg, #d14e1a, #f26522);
+}
+
 /* ==============================
    Footer
    ============================== */

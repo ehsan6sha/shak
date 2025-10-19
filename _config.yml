@@ -1,14 +1,21 @@
 # Site settings
 title: "شَک - پادکست فلسفی نیچه"
 description: "آیا تا به حال به تمام ارزش‌هایی که به ما آموخته‌اند، «شَک» کرده‌اید؟ سفری بی‌پروا به دل «فراسوی نیک و بد» نیچه"
-baseurl: "" # Leave empty for user.github.io/repo-name or set to /repo-name
-url: "" # Your GitHub Pages URL
+baseurl: "/shak" # Your repository name with leading slash
+url: "" # Your GitHub Pages URL (can leave empty for GitHub Pages)
 
 # Podcast Info
 host_name: "احسان"
 about_intro: "اینجا پادکست «شَک» است؛ سفری بی‌پروا و قسمت به قسمت به دل یکی از خطرناک‌ترین کتاب‌های تاریخ فلسفه: «فراسوی نیک و بد» نیچه."
 about_host: "من احسان هستم و قرار است با هم شجاعتِ عبور از مرزهای «نیک» و «بد» را تمرین کنیم. اینجا قرار نیست فیلسوف باشیم، فقط کافی‌ست شجاع و کنجکاو باشیم."
 about_philosophy: "نیچه خطرناک است. نه به این خاطر که «بد» است، بلکه چون شما را وادار می‌کند که همه چیزهایی را که «خوب» می‌دانستید، زیر سؤال ببرید. این سفر برای کسانی است که آماده‌اند «دَم شیر را ببینند»."
+
+# Social & Platform Links
+instagram: "https://instagram.com/shakpodcast"
+telegram: "https://t.me/shakpodcast"
+spotify: "https://open.spotify.com/show/0jE9TiCFuTdPbT435gRR8d"
+apple_podcasts: "https://podcasts.apple.com/us/podcast/پادکست-شک/id1847170622"
+rss_feed: "https://anchor.fm/s/10aa6fc9c/podcast/rss"
 
 # Build settings
 markdown: kramdown
