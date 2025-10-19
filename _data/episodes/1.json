@@ -1,0 +1,29 @@
+{
+  "episode_number": 1,
+  "title": "اپیزود اول: دیدنِ دَم شیر",
+  "description": "در این اپیزود اول، ما با کتاب «فراسوی نیک و بد» آشنا می‌شویم و به این سؤال می‌پردازیم که چرا نیچه این کتاب را نوشت و چرا شما باید آن را بخوانید.",
+  "duration": "28:48",
+  "publish_date": "۱۹ اکتبر ۲۰۲۵",
+  "audio_file": "1.mp3",
+  "video_teaser": "/assets/videos/episode-1-teaser.mp4",
+  "related_audios": [
+    {
+      "name": "پادکست دیپ‌پادکست",
+      "author": "آرمان",
+      "link": "https://www.youtube.com/watch?v=13r0Wv6Fzzs",
+      "description": "اپیزود زندگینامه فردریش نیچه"
+    },
+    {
+      "name": "پادکست ایستگاه فلسفه",
+      "author": "",
+      "link": "https://www.youtube.com/watch?v=K3K8bXa17Sc",
+      "description": "اپیزود نیچه به زبان ساده"
+    },
+    {
+      "name": "پادکست بیوگو",
+      "author": "گروه نویسندگان در سایه",
+      "link": "https://shenoto.com/album/podcast/52149/%D8%A7%D9%BE%DB%8C%D8%B2%D9%88%D8%AF-%DB%B0%D9%A8-%E2%80%93-%D9%85%D9%86-%D8%AF%DB%8C%D9%86%D8%A7%D9%85%DB%8C%D8%AA%D9%85!",
+      "description": "اپیزود هشتم: من رینامیتم"
+    }
+  ]
+}

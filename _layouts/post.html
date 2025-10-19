@@ -1,0 +1,84 @@
+---
+layout: default
+---
+<article class="episode-detail">
+    <div class="container">
+        {% if page.video_teaser %}
+        <div class="video-teaser-container">
+            <video class="episode-video-teaser" controls muted loop playsinline poster="{{ page.video_poster | default: '' }}">
+                <source src="{{ page.video_teaser | relative_url }}" type="video/mp4">
+                مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
+            </video>
+            <div class="video-overlay">
+                <button class="video-play-btn" onclick="toggleVideo()" aria-label="پخش ویدیو">
+                    <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        {% endif %}
+        
+        <a href="/" class="back-link">← بازگشت به صفحه اصلی</a>
+        
+        <header class="episode-header">
+            <h1>{{ page.title }}</h1>
+            <p class="episode-meta">{{ page.date | date: "%d %B %Y" }}</p>
+        </header>
+        
+        <div class="episode-player">
+            <audio controls class="audio-player">
+                <source src="{{ page.audio_url | relative_url }}" type="audio/mpeg">
+                مرورگر شما از پخش صوت پشتیبانی نمی‌کند.
+            </audio>
+            <div class="episode-duration">مدت: {{ page.duration }}</div>
+        </div>
+        
+        <div class="episode-content">
+            {{ content }}
+        </div>
+        
+        {% if page.related_audios %}
+        <section class="related-audios">
+            <h2>صوت‌های مرتبط ذکر شده در این اپیزود</h2>
+            <div class="related-audios-list">
+                {% for audio in page.related_audios %}
+                <div class="related-audio-item">
+                    <h3>{{ audio.name }}</h3>
+                    <p class="audio-author">{{ audio.author }}</p>
+                    <p class="audio-description">{{ audio.description }}</p>
+                    {% if audio.link %}
+                    <a href="{{ audio.link }}" target="_blank" class="audio-link">لینک منبع →</a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+        
+        {% if page.transcript %}
+        <section class="transcript-section">
+            <div class="transcript-header" onclick="toggleTranscript()">
+                <h2>متن کامل اپیزود (Transcript)</h2>
+                <div class="transcript-toggle">
+                    <span class="toggle-text">نمایش متن</span>
+                    <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="transcript-content" id="transcript-content">
+                <div class="transcript-text">
+                    {% assign transcript_name = page.transcript | remove: '.md' %}
+                    {% for transcript in site.transcripts %}
+                        {% assign transcript_filename = transcript.path | split: '/' | last | remove: '.md' %}
+                        {% if transcript_filename == transcript_name %}
+                            {{ transcript.content }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        {% endif %}
+    </div>
+</article>
