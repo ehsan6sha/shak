@@ -730,6 +730,15 @@ a:hover {
     background: linear-gradient(135deg, #d14e1a, #f26522);
 }
 
+/* Castbox Platform Link */
+.platform-link.castbox {
+    background: linear-gradient(135deg, #f55b23, #ff8c42);
+}
+
+.platform-link.castbox:hover {
+    background: linear-gradient(135deg, #d44a1c, #f55b23);
+}
+
 /* ==============================
    Footer
    ============================== */
