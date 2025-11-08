@@ -270,7 +270,6 @@ a:hover {
 
 .audio-player {
     width: 100%;
-    display: none; /* Hide default player, use custom */
 }
 
 .custom-player {
