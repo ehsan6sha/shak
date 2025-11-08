@@ -2,7 +2,8 @@
 title: "شَک - پادکست فلسفی نیچه"
 description: "آیا تا به حال به تمام ارزش‌هایی که به ما آموخته‌اند، «شَک» کرده‌اید؟ سفری بی‌پروا به دل «فراسوی نیک و بد» نیچه"
 baseurl: "/shak" # Your repository name with leading slash
-url: "" # Your GitHub Pages URL (can leave empty for GitHub Pages)
+url: "https://shakpodcast.com" # Your custom domain or GitHub Pages URL
+lang: fa
 
 # Podcast Info
 host_name: "احسان"
@@ -21,6 +22,12 @@ rss_feed: "https://anchor.fm/s/10aa6fc9c/podcast/rss"
 # Build settings
 markdown: kramdown
 permalink: /episodes/:title/
+
+# Plugins
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-seo-tag
 
 # Collections
 collections:

@@ -1,0 +1,163 @@
+{% comment %}
+  SEO meta tags for Persian podcast website
+{% endcomment %}
+
+{% if page.episode_number %}
+  {% case page.episode_number %}
+    {% when 1 %}
+      {% assign episode_data = site.data.episodes['1'] %}
+    {% when 2 %}
+      {% assign episode_data = site.data.episodes['2'] %}
+    {% when 3 %}
+      {% assign episode_data = site.data.episodes['3'] %}
+    {% when 4 %}
+      {% assign episode_data = site.data.episodes['4'] %}
+    {% when 5 %}
+      {% assign episode_data = site.data.episodes['5'] %}
+    {% when 6 %}
+      {% assign episode_data = site.data.episodes['6'] %}
+    {% when 7 %}
+      {% assign episode_data = site.data.episodes['7'] %}
+    {% when 8 %}
+      {% assign episode_data = site.data.episodes['8'] %}
+    {% when 9 %}
+      {% assign episode_data = site.data.episodes['9'] %}
+    {% when 10 %}
+      {% assign episode_data = site.data.episodes['10'] %}
+  {% endcase %}
+  {% assign page_title = episode_data.title %}
+  {% assign page_description = episode_data.description %}
+  {% assign page_audio = site.url | append: site.baseurl | append: '/assets/episodes/' | append: episode_data.audio_file %}
+{% else %}
+  {% assign page_title = page.title | default: site.title %}
+  {% assign page_description = page.description | default: site.description %}
+{% endif %}
+
+<!-- Basic Meta Tags -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Title and Description -->
+<title>{{ page_title }} | {{ site.title }}</title>
+<meta name="description" content="{{ page_description }}">
+<meta name="keywords" content="پادکست فارسی, فلسفه, نیچه, فراسوی نیک و بد, پادکست فلسفی, شک, فریدریش نیچه, اخلاق, روانشناسی, Beyond Good and Evil, Nietzsche, Persian Podcast, Philosophy">
+
+<!-- Language and Direction -->
+<meta http-equiv="content-language" content="fa">
+<meta name="language" content="Persian">
+
+<!-- Author and Publisher -->
+<meta name="author" content="{{ site.host_name }}">
+<meta name="publisher" content="پادکست شک">
+
+<!-- Robots -->
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="googlebot" content="index, follow">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="{% if page.episode_number %}article{% else %}website{% endif %}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+<meta property="og:title" content="{{ page_title }}">
+<meta property="og:description" content="{{ page_description }}">
+<meta property="og:site_name" content="{{ site.title }}">
+<meta property="og:locale" content="fa_IR">
+{% if page.episode_number and episode_data.video_teaser %}
+<meta property="og:image" content="{{ site.url }}{{ site.baseurl }}{{ episode_data.video_teaser | replace: '.mp4', '-poster.jpg' }}">
+{% else %}
+<meta property="og:image" content="{{ site.url }}{{ site.baseurl }}/assets/images/logo.webp">
+{% endif %}
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="{{ page.url | absolute_url }}">
+<meta name="twitter:title" content="{{ page_title }}">
+<meta name="twitter:description" content="{{ page_description }}">
+{% if page.episode_number and episode_data.video_teaser %}
+<meta name="twitter:image" content="{{ site.url }}{{ site.baseurl }}{{ episode_data.video_teaser | replace: '.mp4', '-poster.jpg' }}">
+{% else %}
+<meta name="twitter:image" content="{{ site.url }}{{ site.baseurl }}/assets/images/logo.webp">
+{% endif %}
+
+<!-- Podcast Specific Meta -->
+{% if page.episode_number %}
+<meta property="og:audio" content="{{ page_audio }}">
+<meta property="og:audio:type" content="audio/mpeg">
+<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
+<meta property="article:author" content="{{ site.host_name }}">
+<meta property="article:section" content="فلسفه">
+<meta property="article:tag" content="نیچه">
+<meta property="article:tag" content="فلسفه">
+<meta property="article:tag" content="فراسوی نیک و بد">
+{% endif %}
+
+<!-- RSS Feed -->
+<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ site.rss_feed }}">
+
+<!-- Structured Data - JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "{% if page.episode_number %}PodcastEpisode{% else %}PodcastSeries{% endif %}",
+  {% if page.episode_number %}
+  "episodeNumber": {{ page.episode_number }},
+  "name": "{{ episode_data.title | escape }}",
+  "description": "{{ episode_data.description | escape }}",
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  "duration": "PT{{ episode_data.duration | replace: ':', 'M' }}S",
+  "associatedMedia": {
+    "@type": "MediaObject",
+    "contentUrl": "{{ page_audio }}",
+    "encodingFormat": "audio/mpeg"
+  },
+  "partOfSeries": {
+    "@type": "PodcastSeries",
+    "name": "{{ site.title }}",
+    "url": "{{ site.url }}{{ site.baseurl }}/",
+    "description": "{{ site.description }}"
+  },
+  {% else %}
+  "name": "{{ site.title }}",
+  "description": "{{ site.description }}",
+  "url": "{{ site.url }}{{ site.baseurl }}/",
+  "inLanguage": "fa",
+  {% endif %}
+  "author": {
+    "@type": "Person",
+    "name": "{{ site.host_name }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "پادکست شک",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ site.url }}{{ site.baseurl }}/assets/images/logo.webp"
+    }
+  }
+}
+</script>
+
+<!-- Additional Podcast JSON-LD for Homepage -->
+{% if page.url == '/' or page.url == '/index.html' %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "{{ site.title }}",
+  "alternateName": "شک",
+  "url": "{{ site.url }}{{ site.baseurl }}/",
+  "description": "{{ site.description }}",
+  "inLanguage": "fa",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ site.url }}{{ site.baseurl }}/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{% endif %}
