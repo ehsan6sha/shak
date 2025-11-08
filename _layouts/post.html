@@ -3,13 +3,30 @@ layout: default
 ---
 {% comment %}
 Load episode data from JSON file based on episode_number
-Jekyll data files are accessed by filename, so we need to match the episode_number to the correct file
+Jekyll loads JSON files from _data/episodes/ as a hash with filename as key
 {% endcomment %}
-{% for episode_file in site.data.episodes %}
-  {% if episode_file[1].episode_number == page.episode_number %}
-    {% assign episode_data = episode_file[1] %}
-  {% endif %}
-{% endfor %}
+{% case page.episode_number %}
+  {% when 1 %}
+    {% assign episode_data = site.data.episodes['1'] %}
+  {% when 2 %}
+    {% assign episode_data = site.data.episodes['2'] %}
+  {% when 3 %}
+    {% assign episode_data = site.data.episodes['3'] %}
+  {% when 4 %}
+    {% assign episode_data = site.data.episodes['4'] %}
+  {% when 5 %}
+    {% assign episode_data = site.data.episodes['5'] %}
+  {% when 6 %}
+    {% assign episode_data = site.data.episodes['6'] %}
+  {% when 7 %}
+    {% assign episode_data = site.data.episodes['7'] %}
+  {% when 8 %}
+    {% assign episode_data = site.data.episodes['8'] %}
+  {% when 9 %}
+    {% assign episode_data = site.data.episodes['9'] %}
+  {% when 10 %}
+    {% assign episode_data = site.data.episodes['10'] %}
+{% endcase %}
 
 <article class="episode-detail">
     <div class="container">
@@ -79,13 +96,14 @@ Jekyll data files are accessed by filename, so we need to match the episode_numb
             </div>
             <div class="transcript-content" id="transcript-content">
                 <div class="transcript-text">
-                    {% assign transcript_name = page.transcript | remove: '.md' %}
-                    {% for transcript in site.transcripts %}
-                        {% assign transcript_basename = transcript.name | remove: '.md' %}
-                        {% if transcript_basename == transcript_name %}
-                            {{ transcript.content }}
-                        {% endif %}
-                    {% endfor %}
+                    {% if page.transcript %}
+                        {% capture transcript_path %}_transcripts/{{ page.transcript }}{% endcapture %}
+                        {% for transcript in site.transcripts %}
+                            {% if transcript.path contains page.transcript %}
+                                {{ transcript.content }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </section>

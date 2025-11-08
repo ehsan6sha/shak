@@ -32,11 +32,28 @@ title: "شَک - پادکست فلسفی نیچه"
         <h2>جدیدترین اپیزود</h2>
         {% assign latest = site.posts.first %}
         {% if latest %}
-        {% for episode_file in site.data.episodes %}
-          {% if episode_file[1].episode_number == latest.episode_number %}
-            {% assign latest_episode = episode_file[1] %}
-          {% endif %}
-        {% endfor %}
+        {% case latest.episode_number %}
+          {% when 1 %}
+            {% assign latest_episode = site.data.episodes['1'] %}
+          {% when 2 %}
+            {% assign latest_episode = site.data.episodes['2'] %}
+          {% when 3 %}
+            {% assign latest_episode = site.data.episodes['3'] %}
+          {% when 4 %}
+            {% assign latest_episode = site.data.episodes['4'] %}
+          {% when 5 %}
+            {% assign latest_episode = site.data.episodes['5'] %}
+          {% when 6 %}
+            {% assign latest_episode = site.data.episodes['6'] %}
+          {% when 7 %}
+            {% assign latest_episode = site.data.episodes['7'] %}
+          {% when 8 %}
+            {% assign latest_episode = site.data.episodes['8'] %}
+          {% when 9 %}
+            {% assign latest_episode = site.data.episodes['9'] %}
+          {% when 10 %}
+            {% assign latest_episode = site.data.episodes['10'] %}
+        {% endcase %}
         <div class="featured-episode">
             <h3>{{ latest_episode.title }}</h3>
             <p class="episode-date">{{ latest_episode.publish_date }}</p>
@@ -83,11 +100,28 @@ title: "شَک - پادکست فلسفی نیچه"
         <h2>آرشیو اپیزودها</h2>
         <div class="episodes-grid">
             {% for post in site.posts offset:1 %}
-            {% for episode_file in site.data.episodes %}
-              {% if episode_file[1].episode_number == post.episode_number %}
-                {% assign ep_data = episode_file[1] %}
-              {% endif %}
-            {% endfor %}
+            {% case post.episode_number %}
+              {% when 1 %}
+                {% assign ep_data = site.data.episodes['1'] %}
+              {% when 2 %}
+                {% assign ep_data = site.data.episodes['2'] %}
+              {% when 3 %}
+                {% assign ep_data = site.data.episodes['3'] %}
+              {% when 4 %}
+                {% assign ep_data = site.data.episodes['4'] %}
+              {% when 5 %}
+                {% assign ep_data = site.data.episodes['5'] %}
+              {% when 6 %}
+                {% assign ep_data = site.data.episodes['6'] %}
+              {% when 7 %}
+                {% assign ep_data = site.data.episodes['7'] %}
+              {% when 8 %}
+                {% assign ep_data = site.data.episodes['8'] %}
+              {% when 9 %}
+                {% assign ep_data = site.data.episodes['9'] %}
+              {% when 10 %}
+                {% assign ep_data = site.data.episodes['10'] %}
+            {% endcase %}
             <div class="episode-card">
                 <div class="episode-number">اپیزود {{ post.episode_number }}</div>
                 <h3>{{ ep_data.title }}</h3>
