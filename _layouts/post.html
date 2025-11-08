@@ -100,7 +100,7 @@ Jekyll loads JSON files from _data/episodes/ as a hash with filename as key
                         {% capture transcript_path %}_transcripts/{{ page.transcript }}{% endcapture %}
                         {% for transcript in site.transcripts %}
                             {% if transcript.path contains page.transcript %}
-                                {{ transcript.content }}
+                                {{ transcript.content | markdownify }}
                             {% endif %}
                         {% endfor %}
                     {% endif %}
