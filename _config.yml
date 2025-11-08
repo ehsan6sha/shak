@@ -23,12 +23,6 @@ rss_feed: "https://anchor.fm/s/10aa6fc9c/podcast/rss"
 markdown: kramdown
 permalink: /episodes/:title/
 
-# Plugins
-plugins:
-  - jekyll-sitemap
-  - jekyll-feed
-  - jekyll-seo-tag
-
 # Collections
 collections:
   posts:
