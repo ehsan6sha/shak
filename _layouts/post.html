@@ -1,12 +1,17 @@
 ---
 layout: default
 ---
+{% comment %}
+Load episode data from JSON file based on episode_number
+{% endcomment %}
+{% assign episode_data = site.data.episodes[page.episode_number] %}
+
 <article class="episode-detail">
     <div class="container">
-        {% if page.video_teaser %}
+        {% if episode_data.video_teaser %}
         <div class="video-teaser-container">
             <video class="episode-video-teaser" controls muted loop playsinline poster="{{ page.video_poster | default: '' }}">
-                <source src="{{ page.video_teaser | relative_url }}" type="video/mp4">
+                <source src="{{ episode_data.video_teaser | relative_url }}" type="video/mp4">
                 مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
             </video>
             <div class="video-overlay">
@@ -22,32 +27,32 @@ layout: default
         <a href="/" class="back-link">← بازگشت به صفحه اصلی</a>
         
         <header class="episode-header">
-            <h1>{{ page.title }}</h1>
-            <p class="episode-meta">{{ page.date | date: "%d %B %Y" }}</p>
+            <h1>{{ episode_data.title }}</h1>
+            <p class="episode-meta">{{ episode_data.publish_date }}</p>
         </header>
         
         <div class="episode-player">
             <audio controls class="audio-player">
-                <source src="{{ page.audio_url | relative_url }}" type="audio/mpeg">
+                <source src="{{ '/assets/episodes/' | append: episode_data.audio_file | relative_url }}" type="audio/mpeg">
                 مرورگر شما از پخش صوت پشتیبانی نمی‌کند.
             </audio>
-            <div class="episode-duration">مدت: {{ page.duration }}</div>
+            <div class="episode-duration">مدت: {{ episode_data.duration }}</div>
         </div>
         
         <div class="episode-content">
             {{ content }}
         </div>
         
-        {% if page.related_audios %}
+        {% if episode_data.related_audios and episode_data.related_audios.size > 0 %}
         <section class="related-audios">
             <h2>صوت‌های مرتبط ذکر شده در این اپیزود</h2>
             <div class="related-audios-list">
-                {% for audio in page.related_audios %}
+                {% for audio in episode_data.related_audios %}
                 <div class="related-audio-item">
                     <h3>{{ audio.name }}</h3>
                     <p class="audio-author">{{ audio.author }}</p>
                     <p class="audio-description">{{ audio.description }}</p>
-                    {% if audio.link %}
+                    {% if audio.link and audio.link != "" %}
                     <a href="{{ audio.link }}" target="_blank" class="audio-link">لینک منبع →</a>
                     {% endif %}
                 </div>

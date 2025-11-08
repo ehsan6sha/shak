@@ -1,0 +1,8 @@
+{% comment %}
+Helper to get episode data from JSON files
+Usage: {% include episode_data.html post=post %}
+Output: Sets 'episode' variable with all episode data
+{% endcomment %}
+
+{% assign episode_num = include.post.episode_number %}
+{% assign episode = site.data.episodes[episode_num] %}

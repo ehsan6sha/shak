@@ -9,11 +9,13 @@
 - 🎨 **طراحی تیره و جذاب** با پالت رنگی الهام‌گرفته از نیچه
 - 📱 **کاملاً ریسپانسیو** و بهینه برای موبایل
 - ▶️ **پلیر صوتی سفارشی** با امکان پخش مستقیم
-- 🔄 **تشخیص خودکار اپیزودها** از پوشه GitHub
+- 🤖 **دریافت خودکار اپیزودها** از Spotify RSS با GitHub Actions
+- 📊 **منبع واحد داده** - بدون تکرار اطلاعات
+- 🔗 **لینک‌های قابل کلیک** در توضیحات اپیزودها
 - 🌐 **پشتیبانی کامل از RTL** برای زبان فارسی
-- 🔗 **لینک به پلتفرم‌های مختلف** (Spotify, Apple, YouTube, etc.)
-- 📧 **سیستم خبرنامه** با Mailchimp
-- 📝 **صفحات جزئیات اپیزود** با صوت‌های مرتبط
+- 🎙️ **لینک به پلتفرم‌های مختلف** (Spotify, Apple, Castbox, etc.)
+- 📝 **صفحات جزئیات اپیزود** با transcript و صوت‌های مرتبط
+- 🎬 **پشتیبانی از ویدیو تیزر** برای هر اپیزود
 - 🚀 **میزبانی رایگان** روی GitHub Pages
 
 ## 📚 محتویات
@@ -53,30 +55,51 @@ git push -u origin main
 
 ## 📝 افزودن اپیزود جدید
 
-### روش ساده (مستقیم از GitHub):
+### روش اول: خودکار (پیشنهادی) 🤖
 
-1. **آپلود MP3:** به `assets/episodes/` بروید و فایل `N.mp3` را آپلود کنید
-2. **ایجاد پست:** در `_posts/` یک فایل جدید با نام `YYYY-MM-DD-episode-N.md` ایجاد کنید
+اپیزودها به صورت خودکار از Spotify RSS دریافت می‌شوند:
+
+1. **اجرای خودکار:** هر ۶ ساعت یکبار
+2. **اجرای دستی:** Actions → "Fetch Episodes from Spotify RSS" → Run workflow
+
+اپیزودهای جدید به صورت خودکار دانلود و به سایت اضافه می‌شوند!
+
+📖 **راهنمای کامل:** [EPISODE_MANAGEMENT.md](EPISODE_MANAGEMENT.md)
+
+### روش دوم: دستی
+
+برای کنترل کامل یا افزودن transcript:
+
+1. **ایجاد فایل JSON:** در `_data/episodes/N.json`:
+
+```json
+{
+  "episode_number": N,
+  "title": "عنوان اپیزود",
+  "description": "توضیحات با [لینک‌های](https://example.com) قابل کلیک",
+  "duration": "XX:XX",
+  "publish_date": "۱۵ نوامبر ۲۰۲۵",
+  "audio_file": "N.mp3",
+  "video_teaser": "/assets/videos/episode-N-teaser.mp4",
+  "related_audios": []
+}
+```
+
+2. **آپلود MP3:** فایل را در `assets/episodes/N.mp3` قرار دهید
+
+3. **ایجاد پست:** در `_posts/YYYY-MM-DD-episode-N.md`:
 
 ```markdown
 ---
 layout: post
-title: "عنوان اپیزود"
-date: 2025-10-19
-audio_url: "/assets/episodes/N.mp3"
-duration: "XX:XX"
 episode_number: N
-related_audios:
-  - name: "نام منبع"
-    author: "نویسنده"
-    link: "https://example.com"
-    description: "توضیحات"
+transcript: "episode-N.md"
 ---
 
 محتوای اپیزود شما...
 ```
 
-3. **Commit** کنید و GitHub Pages به طور خودکار سایت را به‌روزرسانی می‌کند!
+4. **Commit** کنید - سایت خودکار به‌روز می‌شود!
 
 ## ⚙️ پیکربندی
 
@@ -129,23 +152,31 @@ shak/
 ├── _layouts/                # قالب‌های HTML
 │   ├── default.html
 │   └── post.html
-├── _posts/                  # اپیزودها (Markdown)
+├── _posts/                  # محتوای اپیزودها (Markdown)
 │   └── YYYY-MM-DD-episode-N.md
-├── _data/                   # داده‌های ساختاریافته
+├── _data/                   # منبع واحد داده اپیزودها
 │   └── episodes/
-│       └── N.json
+│       └── N.json           # اطلاعات کامل اپیزود
+├── _transcripts/            # متن کامل اپیزودها
+│   └── episode-N.md
 ├── assets/
 │   ├── css/
 │   │   └── style.css        # استایل‌ها
 │   ├── js/
 │   │   └── player.js        # پلیر صوتی
-│   ├── episodes/            # فایل‌های MP3
+│   ├── episodes/            # فایل‌های MP3 (دانلود خودکار)
 │   │   └── N.mp3
+│   ├── videos/              # ویدیوهای تیزر
+│   │   └── episode-N-teaser.mp4
 │   └── images/
-│       └── favicon.svg
+│       └── logo.webp
+├── .github/
+│   ├── workflows/
+│   │   └── fetch_episodes.yml    # دریافت خودکار از Spotify
+│   └── scripts/
+│       └── fetch_episodes.py     # اسکریپت Python
 ├── index.html               # صفحه اصلی
-├── .github/workflows/       # GitHub Actions
-│   └── jekyll.yml
+├── EPISODE_MANAGEMENT.md    # راهنمای مدیریت اپیزودها
 └── README.md
 ```
 

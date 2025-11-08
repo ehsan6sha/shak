@@ -1,23 +1,21 @@
 ---
 layout: post
-title: "اپیزود X: عنوان اپیزود"
-date: 2025-10-19
-audio_url: "/assets/episodes/X.mp3"
-duration: "XX:XX"
 episode_number: X
-video_teaser: "/assets/videos/episode-X-teaser.mp4"  # اختیاری - برای نمایش ویدیو تیزر
-video_poster: "/assets/videos/episode-X-poster.jpg"  # اختیاری - تصویر پیش‌نمایش ویدیو
-transcript: "episode-X.md"
-related_audios:
-  - name: "نام اولین صوت مرتبط"
-    author: "نام نویسنده یا خواننده"
-    link: "https://example.com/link-to-audio"
-    description: "توضیحات مختصر درباره این صوت و ارتباط آن با اپیزود"
-  - name: "نام دومین صوت مرتبط"
-    author: "نام نویسنده"
-    link: "https://example.com/another-link"
-    description: "توضیحات دیگر"
+transcript: "episode-X.md"  # اختیاری - فایل متن کامل اپیزود
 ---
+
+<!-- 
+  توجه: تمام اطلاعات اپیزود (عنوان، تاریخ، مدت، فایل صوتی، و غیره) 
+  از فایل JSON در _data/episodes/X.json خوانده می‌شود.
+  
+  برای افزودن اپیزود جدید:
+  1. فایل JSON را در _data/episodes/ ایجاد کنید
+  2. این فایل markdown را با محتوای اپیزود ایجاد کنید
+  3. در صورت نیاز، فایل transcript را در _transcripts/ قرار دهید
+  
+  یا به صورت خودکار:
+  - GitHub Actions workflow را اجرا کنید تا از Spotify RSS fetch شود
+-->
 
 ## معرفی اپیزود
 

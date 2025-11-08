@@ -32,12 +32,13 @@ title: "شَک - پادکست فلسفی نیچه"
         <h2>جدیدترین اپیزود</h2>
         {% assign latest = site.posts.first %}
         {% if latest %}
+        {% assign latest_episode = site.data.episodes[latest.episode_number] %}
         <div class="featured-episode">
-            <h3>{{ latest.title }}</h3>
-            <p class="episode-date">{{ latest.date | date: "%d %B %Y" }}</p>
+            <h3>{{ latest_episode.title }}</h3>
+            <p class="episode-date">{{ latest_episode.publish_date }}</p>
             <div class="episode-player">
                 <audio id="featured-player" class="audio-player">
-                    <source src="{{ latest.audio_url | relative_url }}" type="audio/mpeg">
+                    <source src="{{ '/assets/episodes/' | append: latest_episode.audio_file | relative_url }}" type="audio/mpeg">
                 </audio>
                 <div class="custom-player">
                     <button class="play-btn" onclick="togglePlay('featured-player')">
@@ -55,7 +56,7 @@ title: "شَک - پادکست فلسفی نیچه"
                         </div>
                         <div class="player-controls">
                             <span class="current-time">0:00</span>
-                            <span class="duration">{{ latest.duration }}</span>
+                            <span class="duration">{{ latest_episode.duration }}</span>
                         </div>
                     </div>
                 </div>
@@ -78,13 +79,14 @@ title: "شَک - پادکست فلسفی نیچه"
         <h2>آرشیو اپیزودها</h2>
         <div class="episodes-grid">
             {% for post in site.posts offset:1 %}
+            {% assign ep_data = site.data.episodes[post.episode_number] %}
             <div class="episode-card">
-                <div class="episode-number">اپیزود {{ site.posts.size | minus: forloop.index }}</div>
-                <h3>{{ post.title }}</h3>
-                <p class="episode-date">{{ post.date | date: "%d %B %Y" }}</p>
-                <div class="episode-duration">{{ post.duration }}</div>
+                <div class="episode-number">اپیزود {{ post.episode_number }}</div>
+                <h3>{{ ep_data.title }}</h3>
+                <p class="episode-date">{{ ep_data.publish_date }}</p>
+                <div class="episode-duration">{{ ep_data.duration }}</div>
                 <div class="episode-actions">
-                    <button class="play-btn-small" onclick="playEpisode('{{ post.audio_url | relative_url }}')">
+                    <button class="play-btn-small" onclick="playEpisode('{{ '/assets/episodes/' | append: ep_data.audio_file | relative_url }}')">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <polygon points="5 3 19 12 5 21 5 3"></polygon>
                         </svg>
