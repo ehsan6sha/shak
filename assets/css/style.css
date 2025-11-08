@@ -270,6 +270,10 @@ a:hover {
 
 .audio-player {
     width: 100%;
+    display: none;
+}
+.audio-player2 {
+    width: 100%;
 }
 
 .custom-player {
