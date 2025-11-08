@@ -81,8 +81,8 @@ Jekyll data files are accessed by filename, so we need to match the episode_numb
                 <div class="transcript-text">
                     {% assign transcript_name = page.transcript | remove: '.md' %}
                     {% for transcript in site.transcripts %}
-                        {% assign transcript_filename = transcript.path | split: '/' | last | remove: '.md' %}
-                        {% if transcript_filename == transcript_name %}
+                        {% assign transcript_basename = transcript.name | remove: '.md' %}
+                        {% if transcript_basename == transcript_name %}
                             {{ transcript.content }}
                         {% endif %}
                     {% endfor %}
