@@ -539,11 +539,11 @@ a:hover {
 }
 
 .platform-link.apple:hover {
-    border-color: #FA243C;
+    border-color: #b6b6b6;
 }
 
 .platform-link.apple:hover svg {
-    color: #FA243C;
+    color: #b6b6b6;
 }
 
 .platform-link.youtube:hover {
@@ -734,12 +734,21 @@ a:hover {
 }
 
 /* Castbox Platform Link */
-.platform-link.castbox {
-    background: linear-gradient(135deg, #f55b23, #ff8c42);
+.platform-link.castbox:hover {
+    border-color: #e75b42;
 }
 
-.platform-link.castbox:hover {
-    background: linear-gradient(135deg, #d44a1c, #f55b23);
+.platform-link.castbox:hover svg {
+    color: #e75b42;
+}
+
+/* Shenoto Platform Link */
+.platform-link.shenoto:hover {
+    border-color: #ee472a;
+}
+
+.platform-link.shenoto:hover svg {
+    color: #ee472a;
 }
 
 /* ==============================
