@@ -6,5 +6,12 @@
   "publish_date": "۱۶ نوامبر ۲۰۲۵",
   "audio_file": "7.mp3",
   "video_teaser": "/assets/videos/episode-7-teaser.mp4",
-  "related_audios": []
+  "related_audios": [
+    {
+      "name": "سقوط",
+      "author": "کاکوبند",
+      "link": "https://www.instagram.com/kakoband",
+      "description": ""
+    }
+  ]
 }
