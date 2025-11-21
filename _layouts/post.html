@@ -82,6 +82,42 @@ Jekyll loads JSON files from _data/episodes/ as a hash with filename as key
             </div>
         </section>
         {% endif %}
+
+        {% if episode_data.related_videos and episode_data.related_videos.size > 0 %}
+        <section class="related-audios">
+            <h2>پادگپ این اپیزود (مصاحبه با اهل فن)</h2>
+            <div class="related-audios-list">
+                {% for video in episode_data.related_videos %}
+                <div class="related-audio-item">
+                    <h3>{{ audio.name }}</h3>
+                    <p class="audio-author">{{ video.author }}</p>
+                    <p class="audio-description">{{ video.description }}</p>
+                    {% if video.youtube and video.youtube != "" %}
+                    <a href="{{ video.youtube }}" class="social-link instagram" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M29.41,9.26a3.5,3.5,0,0,0-2.47-2.47C24.76,6.2,16,6.2,16,6.2s-8.76,0-10.94.59A3.5,3.5,0,0,0,2.59,9.26,36.13,36.13,0,0,0,2,16a36.13,36.13,0,0,0,.59,6.74,3.5,3.5,0,0,0,2.47,2.47C7.24,25.8,16,25.8,16,25.8s8.76,0,10.94-.59a3.5,3.5,0,0,0,2.47-2.47A36.13,36.13,0,0,0,30,16,36.13,36.13,0,0,0,29.41,9.26ZM13.2,20.2V11.8L20.47,16Z"></path>
+                        </svg>
+                        <span>لینک یوتیوب →</span>
+                    </a>
+                    {% endif %}
+                    {% if video.instagram and video.instagram != "" %}
+                    <a href="{{ video.instagram }}" class="social-link instagram" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                        <span>لینک اینستاگرام →</span>
+                    </a>
+                    {% endif %}
+                    {% if video.aparat and video.aparat != "" %}
+                    <a href="{{ video.aparat }}" target="_blank" class="audio-link">لینک آپارات →</a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
         
         {% if page.transcript %}
         <section class="transcript-section">
