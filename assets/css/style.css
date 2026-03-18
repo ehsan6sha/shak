@@ -293,6 +293,11 @@ a:hover {
     font-weight: 600;
 }
 
+.chapter-mark.completed {
+    color: var(--accent-gold);
+    font-weight: 600;
+}
+
 /* ==============================
    About Section
    ============================== */
