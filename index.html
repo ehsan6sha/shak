@@ -1,64 +1,29 @@
 ---
 layout: default
 title: "شَک - پادکست فلسفی نیچه"
-description: "پادکست فارسی فلسفه و نیچه - سفری عمیق به دل فراسوی نیک و بد. آیا به تمام ارزش‌هایی که به شما آموخته‌اند، شک کرده‌اید؟"
+description: "پادکست شک - پادکست فارسی فلسفه و فردریک نیچه. سفری عمیق به دل کتاب فراسوی نیک و بد برای تفکر، خودشناسی و کتابخوانی فلسفی."
 ---
 
-<!-- Hero Section -->
+{% assign latest = site.posts.first %}
+{% if latest %}
+  {% assign ep_key = latest.episode_number | append: "" %}
+  {% assign latest_episode = site.data.episodes[ep_key] %}
+{% endif %}
+
+<!-- Hero Section — with integrated latest episode player -->
 <section class="hero">
     <div class="container">
         <div class="logo-container">
-            <img src="{{ '/assets/images/logo.webp' | relative_url }}" alt="{{ site.title }}" class="logo-image">
+            <img src="{{ '/assets/images/logo.webp' | relative_url }}" alt="پادکست شک - پادکست فارسی فلسفه فردریک نیچه و کتاب فراسوی نیک و بد" class="logo-image">
         </div>
+        <h1 class="sr-only">پادکست شک - سفری فلسفی به دل کتاب فراسوی نیک و بد فردریک نیچه | تفکر، خودشناسی و کتابخوانی</h1>
         <p class="tagline">{{ site.description }}</p>
-        <div class="scroll-indicator">↓</div>
-    </div>
-</section>
 
-<!-- About Section -->
-<section class="about">
-    <div class="container">
-        <h2>درباره پادکست شک</h2>
-        <div class="about-content">
-            <p class="highlight">{{ site.about_intro }}</p>
-            <p>{{ site.about_host }}</p>
-            <p>{{ site.about_philosophy }}</p>
-        </div>
-    </div>
-</section>
-
-<!-- Latest Episode Section -->
-<section class="latest-episode">
-    <div class="container">
-        <h2>جدیدترین اپیزود</h2>
-        {% assign latest = site.posts.first %}
-        {% if latest %}
-        {% case latest.episode_number %}
-          {% when 1 %}
-            {% assign latest_episode = site.data.episodes['1'] %}
-          {% when 2 %}
-            {% assign latest_episode = site.data.episodes['2'] %}
-          {% when 3 %}
-            {% assign latest_episode = site.data.episodes['3'] %}
-          {% when 4 %}
-            {% assign latest_episode = site.data.episodes['4'] %}
-          {% when 5 %}
-            {% assign latest_episode = site.data.episodes['5'] %}
-          {% when 6 %}
-            {% assign latest_episode = site.data.episodes['6'] %}
-          {% when 7 %}
-            {% assign latest_episode = site.data.episodes['7'] %}
-          {% when 8 %}
-            {% assign latest_episode = site.data.episodes['8'] %}
-          {% when 9 %}
-            {% assign latest_episode = site.data.episodes['9'] %}
-          {% when 10 %}
-            {% assign latest_episode = site.data.episodes['10'] %}
-        {% endcase %}
-        <div class="featured-episode">
-            <h3>{{ latest_episode.title }}</h3>
-            <p class="episode-date">{{ latest_episode.publish_date }}</p>
-            <div class="episode-player">
+        {% if latest_episode %}
+        <div class="hero-player animate-on-scroll">
+            <div class="hero-player-label">جدیدترین اپیزود</div>
+            <h2 class="hero-episode-title">{{ latest_episode.title }}</h2>
+            <div class="episode-player" id="main-player-section">
                 <audio id="featured-player" class="audio-player">
                     <source src="{{ '/assets/episodes/' | append: latest_episode.audio_file | relative_url }}" type="audio/mpeg">
                 </audio>
@@ -83,53 +48,70 @@ description: "پادکست فارسی فلسفه و نیچه - سفری عمیق
                     </div>
                 </div>
             </div>
-            <div class="episode-description">
-                {{ latest.excerpt }}
-            </div>
             <a href="{{ latest.url | relative_url }}" class="read-more">ادامه مطلب و نمایش جزئیات →</a>
         </div>
-        {% else %}
-        <p class="no-episodes">به زودی اپیزود اول منتشر خواهد شد...</p>
         {% endif %}
+    </div>
+</section>
+
+<!-- Book Progress Indicator -->
+<section class="book-progress animate-on-scroll">
+    <div class="container">
+        <div class="progress-indicator">
+            <div class="progress-label">
+                <span class="progress-chapter">فصل اول: درباره‌ی پیش‌داوری‌های فیلسوفان</span>
+                <span class="progress-count">{{ site.posts.size }} اپیزود از ۲۳ قصار</span>
+            </div>
+            <div class="book-progress-bar">
+                <div class="book-progress-fill" style="width: {% assign progress = site.posts.size | times: 100 | divided_by: 23 %}{{ progress }}%"></div>
+            </div>
+            <div class="progress-chapters">
+                <span class="chapter-mark active">فصل ۱</span>
+                <span class="chapter-mark">فصل ۲</span>
+                <span class="chapter-mark">فصل ۳</span>
+                <span class="chapter-mark">فصل ۴</span>
+                <span class="chapter-mark">فصل ۵</span>
+                <span class="chapter-mark">فصل ۶</span>
+                <span class="chapter-mark">فصل ۷</span>
+                <span class="chapter-mark">فصل ۸</span>
+                <span class="chapter-mark">فصل ۹</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about animate-on-scroll">
+    <div class="container">
+        <h2>درباره پادکست شک</h2>
+        <div class="about-content">
+            <p class="highlight">{{ site.about_intro }}</p>
+            <p>{{ site.about_host }}</p>
+            <p>{{ site.about_philosophy }}</p>
+        </div>
     </div>
 </section>
 
 <!-- Episode Archive -->
 {% if site.posts.size > 1 %}
-<section class="episodes-archive">
+<section class="episodes-archive animate-on-scroll">
     <div class="container">
         <h2>آرشیو اپیزودها</h2>
         <div class="episodes-grid">
-            {% for post in site.posts offset:1 %}
-            {% case post.episode_number %}
-              {% when 1 %}
-                {% assign ep_data = site.data.episodes['1'] %}
-              {% when 2 %}
-                {% assign ep_data = site.data.episodes['2'] %}
-              {% when 3 %}
-                {% assign ep_data = site.data.episodes['3'] %}
-              {% when 4 %}
-                {% assign ep_data = site.data.episodes['4'] %}
-              {% when 5 %}
-                {% assign ep_data = site.data.episodes['5'] %}
-              {% when 6 %}
-                {% assign ep_data = site.data.episodes['6'] %}
-              {% when 7 %}
-                {% assign ep_data = site.data.episodes['7'] %}
-              {% when 8 %}
-                {% assign ep_data = site.data.episodes['8'] %}
-              {% when 9 %}
-                {% assign ep_data = site.data.episodes['9'] %}
-              {% when 10 %}
-                {% assign ep_data = site.data.episodes['10'] %}
-            {% endcase %}
-            <div class="episode-card">
+            {% for post in site.posts %}
+            {% assign ep_key = post.episode_number | append: "" %}
+            {% assign ep_data = site.data.episodes[ep_key] %}
+            <div class="episode-card {% if forloop.first %}episode-card--latest{% endif %}">
                 <div class="episode-number">اپیزود {{ post.episode_number }}</div>
+                {% if forloop.first %}<div class="episode-badge-new">جدید</div>{% endif %}
                 <h3>{{ ep_data.title }}</h3>
                 <p class="episode-date">{{ ep_data.publish_date }}</p>
                 <div class="episode-duration">{{ ep_data.duration }}</div>
+                <div class="episode-card-excerpt">
+                    {{ post.excerpt | strip_html | truncate: 100 }}
+                </div>
                 <div class="episode-actions">
-                    <button class="play-btn-small" onclick="playEpisode('{{ '/assets/episodes/' | append: ep_data.audio_file | relative_url }}')">
+                    <button class="play-btn-small" onclick="playEpisode('{{ '/assets/episodes/' | append: ep_data.audio_file | relative_url }}', '{{ ep_data.title | escape }}')">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <polygon points="5 3 19 12 5 21 5 3"></polygon>
                         </svg>
@@ -145,7 +127,7 @@ description: "پادکست فارسی فلسفه و نیچه - سفری عمیق
 {% endif %}
 
 <!-- Subscribe Section -->
-<section class="subscribe">
+<section class="subscribe animate-on-scroll">
     <div class="container">
         <h2>کجا بشنویم؟</h2>
         <p class="subscribe-intro">پادکست «شَک» را در پلتفرم دلخواه خود گوش دهید:</p>
@@ -188,7 +170,7 @@ description: "پادکست فارسی فلسفه و نیچه - سفری عمیق
                 <span>یوتیوب</span>
             </a>
         </div>
-        
+
         <div class="social-links">
             <h3>ویدیوهای تکمیلی و مصاحبه ها (پادگپ) را در شبکه های اجتماعی ببینید</h3>
             <a href="https://instagram.com/shakpodcast" class="social-link instagram" target="_blank" rel="noopener">
@@ -222,11 +204,11 @@ description: "پادکست فارسی فلسفه و نیچه - سفری عمیق
 </section>
 
 <!-- RSS Subscription Section -->
-<section class="newsletter">
+<section class="newsletter animate-on-scroll">
     <div class="container">
         <h2>از اپیزودهای جدید باخبر شوید</h2>
         <p>برای دریافت اطلاعیه‌های جدید، RSS Feed ما را در برنامه پادکست خود دنبال کنید:</p>
-        
+
         <div class="rss-subscription">
             <a href="https://anchor.fm/s/10aa6fc9c/podcast/rss" class="rss-button" target="_blank">
                 <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
@@ -240,6 +222,29 @@ description: "پادکست فارسی فلسفه و نیچه - سفری عمیق
         </div>
     </div>
 </section>
+
+<!-- Sticky Mini Player -->
+<div class="sticky-player" id="sticky-player">
+    <div class="sticky-player-inner">
+        <button class="sticky-play-btn" onclick="togglePlay('featured-player')">
+            <svg class="play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <svg class="pause-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+        </button>
+        <div class="sticky-info">
+            <div class="sticky-title" id="sticky-title">در حال پخش...</div>
+            <div class="sticky-progress">
+                <div class="sticky-progress-fill" id="sticky-progress-fill"></div>
+            </div>
+        </div>
+        <span class="sticky-time" id="sticky-time">0:00</span>
+        <button class="sticky-close" onclick="closeStickyPlayer()">&times;</button>
+    </div>
+</div>
 
 <!-- Footer -->
 <footer class="footer">

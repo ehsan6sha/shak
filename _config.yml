@@ -1,6 +1,6 @@
 # Site settings
 title: "شَک - پادکست فلسفی نیچه"
-description: "آیا تا به حال به تمام ارزش‌هایی که به ما آموخته‌اند، «شَک» کرده‌اید؟ سفری بی‌پروا به دل «فراسوی نیک و بد» نیچه"
+description: "پادکست فارسی فلسفه و فردریک نیچه | سفری بی‌پروا به دل کتاب فراسوی نیک و بد برای تفکر، خودشناسی و کتابخوانی فلسفی"
 baseurl: "/shak" # Your repository name with leading slash
 url: "https://shakpodcast.com" # Your custom domain or GitHub Pages URL
 lang: fa
