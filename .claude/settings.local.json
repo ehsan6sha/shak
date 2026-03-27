@@ -7,7 +7,8 @@
       "Bash(git -C /mnt/e/GitHub/shak log --all --oneline --grep=\"episode.10\\\\|Episode.10\\\\|10\")",
       "Bash(git -C /mnt/e/GitHub/shak log --all --oneline)",
       "Bash(git:*)",
-      "Bash(ffprobe -v quiet -show_entries format=duration -of csv=p=0 /mnt/e/GitHub/shak/assets/episodes/11.mp3)"
+      "Bash(ffprobe -v quiet -show_entries format=duration -of csv=p=0 /mnt/e/GitHub/shak/assets/episodes/11.mp3)",
+      "Bash(python3:*)"
     ]
   }
 }
