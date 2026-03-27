@@ -489,11 +489,59 @@ a:hover {
     background-color: var(--bg-dark);
 }
 
+/* Chapter Tabs */
+.chapter-tabs {
+    display: flex;
+    gap: 8px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.chapter-tab {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: rgba(244, 244, 244, 0.6);
+    padding: 10px 22px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.chapter-tab:hover {
+    border-color: var(--accent-gold);
+    color: var(--text-primary);
+}
+
+.chapter-tab.active {
+    background: var(--accent-gold);
+    border-color: var(--accent-gold);
+    color: var(--bg-dark);
+    font-weight: 600;
+}
+
+.tab-badge {
+    font-size: 0.75rem;
+}
+
+.chapter-tab.active .completed-badge {
+    color: var(--bg-dark);
+}
+
 .episodes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 30px;
     margin-top: 40px;
+}
+
+.episode-card.hidden-by-tab {
+    display: none;
 }
 
 .episode-card {
@@ -1416,7 +1464,16 @@ a:hover {
     .progress-chapters {
         display: none;
     }
-    
+
+    .chapter-tabs {
+        gap: 6px;
+    }
+
+    .chapter-tab {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+
     .about,
     .latest-episode,
     .episodes-archive,

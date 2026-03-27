@@ -236,6 +236,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Switch chapter tab in archive
+function switchChapter(chapter, btn) {
+    // Update active tab
+    document.querySelectorAll('.chapter-tab').forEach(function(tab) {
+        tab.classList.remove('active');
+    });
+    btn.classList.add('active');
+
+    // Filter cards
+    document.querySelectorAll('.episode-card').forEach(function(card) {
+        if (chapter === 'all' || card.getAttribute('data-chapter') === String(chapter)) {
+            card.classList.remove('hidden-by-tab');
+        } else {
+            card.classList.add('hidden-by-tab');
+        }
+    });
+}
+
 // Toggle transcript visibility
 function toggleTranscript() {
     const header = document.querySelector('.transcript-header');

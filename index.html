@@ -94,14 +94,29 @@ description: "پادکست شک - پادکست فارسی فلسفه و فردر
 
 <!-- Episode Archive -->
 {% if site.posts.size > 1 %}
+{% comment %} Collect unique chapters in order {% endcomment %}
+{% assign chapters = site.posts | map: "chapter" | uniq | sort %}
 <section class="episodes-archive animate-on-scroll">
     <div class="container">
         <h2>آرشیو اپیزودها</h2>
+
+        <!-- Chapter Tabs -->
+        <div class="chapter-tabs" role="tablist">
+            <button class="chapter-tab active" role="tab" data-chapter="all" onclick="switchChapter('all', this)">همه</button>
+            {% for ch in chapters %}
+            <button class="chapter-tab" role="tab" data-chapter="{{ ch }}" onclick="switchChapter('{{ ch }}', this)">
+                فصل {{ ch }}
+                {% if ch == 1 %}<span class="tab-badge completed-badge">✓</span>{% endif %}
+            </button>
+            {% endfor %}
+        </div>
+
+        <!-- Episodes Grid -->
         <div class="episodes-grid">
             {% for post in site.posts %}
             {% assign ep_key = post.episode_number | append: "" %}
             {% assign ep_data = site.data.episodes[ep_key] %}
-            <div class="episode-card {% if forloop.first %}episode-card--latest{% endif %}">
+            <div class="episode-card {% if forloop.first %}episode-card--latest{% endif %}" data-chapter="{{ post.chapter }}">
                 <div class="episode-number">اپیزود {{ post.episode_number }}</div>
                 {% if forloop.first %}<div class="episode-badge-new">جدید</div>{% endif %}
                 <h3>{{ ep_data.title }}</h3>
