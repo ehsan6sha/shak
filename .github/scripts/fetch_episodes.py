@@ -77,8 +77,9 @@ def extract_book_metadata(title):
                 meta['part'] = ORDINAL_WORDS[word]
         return meta
 
-    # Aphorism range: "قصارهای 27 و 28" / "جملات قصار 20 تا 23" / "قصار 25"
-    m = re.search(r'قصار\S*\s*(\d+)\s*(?:(?:و|تا|الی|[-–])\s*(\d+))?', t)
+    # Aphorism range: "قصارهای 27 و 28" / "جملات قصار 20 تا 23" /
+    # "قصار های 25 و 26" / "قصار 24، 25"
+    m = re.search(r'قصار\S*\s*(?:های?\s+)?(\d+)\s*(?:(?:و|تا|الی|[-–،,])\s*(\d+))?', t)
     if m:
         meta['aphorism_start'] = int(m.group(1))
         meta['aphorism_end'] = int(m.group(2)) if m.group(2) else int(m.group(1))
@@ -103,29 +104,64 @@ def extract_book_metadata(title):
     return meta
 
 
+# Persian ordinal words for episode numbers, longest first so that
+# e.g. "بیست و یکم" wins over "یکم"
+EPISODE_ORDINALS = {
+    'بیست و چهارم': 24, 'بیست و پنجم': 25, 'بیست و ششم': 26, 'بیست و هفتم': 27,
+    'بیست و هشتم': 28, 'بیست و نهم': 29, 'بیست و یکم': 21, 'بیست و دوم': 22,
+    'بیست و سوم': 23, 'چهاردهم': 14, 'پانزدهم': 15, 'شانزدهم': 16,
+    'هفدهم': 17, 'هجدهم': 18, 'نوزدهم': 19, 'یازدهم': 11, 'دوازدهم': 12,
+    'سیزدهم': 13, 'بیستم': 20, 'سی‌ام': 30, 'سی ام': 30, 'چهارم': 4,
+    'پنجم': 5, 'ششم': 6, 'هفتم': 7, 'هشتم': 8, 'نهم': 9, 'دهم': 10,
+    'اول': 1, 'یکم': 1, 'دوم': 2, 'سوم': 3,
+}
+
+PART_WORDS = {'اول': 1, 'یکم': 1, 'دوم': 2, 'سوم': 3, 'چهارم': 4, 'پنجم': 5}
+
+
 def extract_episode_number(title):
-    """Extract episode number from title."""
-    # Try Persian numbers first
-    persian_numbers = {
-        'اول': 1, 'دوم': 2, 'سوم': 3, 'چهارم': 4, 'پنجم': 5,
-        'ششم': 6, 'هفتم': 7, 'هشتم': 8, 'نهم': 9, 'دهم': 10
-    }
-    
-    for word, num in persian_numbers.items():
-        if f'اپیزود {word}' in title:
-            return num
-    
-    # Try digit extraction
-    match = re.search(r'اپیزود\s*(\d+)', title)
-    if match:
-        return int(match.group(1))
-    
-    # Fallback: try to find any number in title
-    match = re.search(r'(\d+)', title)
-    if match:
-        return int(match.group(1))
-    
-    return None
+    """Extract the episode number from a Persian title.
+
+    Returns an int (e.g. 13), a string for multi-part episodes (e.g. "13-1"
+    from "اپیزود سیزدهم (بخش اول)"), or None when no number can be determined
+    CONFIDENTLY. There is deliberately no "first number in the title"
+    fallback: guessing used to pick up aphorism numbers ("قصار 27") and
+    created duplicate episodes (e.g. episode-27 duplicating episode 13-1).
+    Unparseable entries are skipped with a warning instead.
+    """
+    t = title.translate(PERSIAN_DIGITS)
+
+    # Base number: digits or ordinal word after اپیزود/قسمت
+    num = None
+    m = re.search(r'(?:اپیزود|قسمت)\s*(\d+)', t)
+    if m:
+        num = int(m.group(1))
+    else:
+        for word in sorted(EPISODE_ORDINALS, key=len, reverse=True):
+            if re.search(r'(?:اپیزود|قسمت)\s+' + re.escape(word), t):
+                num = EPISODE_ORDINALS[word]
+                break
+
+    if num is None:
+        return None
+
+    # Part suffix ("بخش اول" → -1) — only when it appears BEFORE the first
+    # colon, i.e. attached to the episode designation itself. Preface
+    # episodes like "اپیزود دوم: پیش گفتار، بخش اول" keep their plain number
+    # because there بخش comes after the colon.
+    head = re.split(r'[:：]', t, maxsplit=1)[0]
+    part = None
+    m = re.search(r'بخش\s*(\d+)', head)
+    if m:
+        part = int(m.group(1))
+    else:
+        m = re.search(r'بخش\s+([^\s()،:.«»-]+)', head)
+        if m and m.group(1) in PART_WORDS:
+            part = PART_WORDS[m.group(1)]
+
+    if part is not None:
+        return f"{num}-{part}"
+    return num
 
 
 def convert_html_to_markdown(html_content):
