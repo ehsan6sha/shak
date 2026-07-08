@@ -1,0 +1,22 @@
+<!-- Sticky Mini Player (appears while audio plays and the main player is out of view) -->
+<div class="sticky-player" id="sticky-player">
+    <div class="sticky-player-inner">
+        <button class="sticky-play-btn" onclick="togglePlay('featured-player')" aria-label="پخش / توقف">
+            <svg class="play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <svg class="pause-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+        </button>
+        <div class="sticky-info">
+            <div class="sticky-title" id="sticky-title">در حال پخش…</div>
+            <div class="sticky-progress">
+                <div class="sticky-progress-fill" id="sticky-progress-fill"></div>
+            </div>
+        </div>
+        <span class="sticky-time ltr" id="sticky-time">۰:۰۰</span>
+        <button class="sticky-close" onclick="closeStickyPlayer()" aria-label="بستن">&times;</button>
+    </div>
+</div>

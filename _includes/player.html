@@ -1,0 +1,31 @@
+{%- comment -%}
+Main custom audio player (one per page). Keeps the id/class contract of assets/js/player.js:
+#featured-player audio, .custom-player, .play-btn, .progress-bar/.progress-fill, .current-time, .duration.
+Usage: {% include player.html src=audio_url duration=episode.duration %}
+{%- endcomment -%}
+<div class="episode-player" id="main-player-section">
+    <audio id="featured-player" class="audio-player" preload="metadata">
+        <source src="{{ include.src }}" type="audio/mpeg">
+        مرورگر شما از پخش صوت پشتیبانی نمی‌کند.
+    </audio>
+    <div class="custom-player">
+        <button class="play-btn" onclick="togglePlay('featured-player')" aria-label="پخش / توقف">
+            <svg class="play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <svg class="pause-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+        </button>
+        <div class="player-info">
+            <div class="progress-bar" onclick="seek(event, 'featured-player')" role="slider" aria-label="نوار پیشرفت پخش">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="player-controls">
+                <span class="current-time ltr">۰:۰۰</span>
+                <span class="duration ltr">{% include duration.html d=include.duration %}</span>
+            </div>
+        </div>
+    </div>
+</div>

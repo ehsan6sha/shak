@@ -2,127 +2,169 @@
 layout: default
 ---
 {% comment %}
-Load episode data from JSON file based on episode_number
-Jekyll loads JSON files from _data/episodes/ as a hash with filename as key
+Episode detail page. Episode metadata (title, date, duration, audio, related media)
+comes from _data/episodes/<episode_number>.json — the same contract the RSS fetch
+pipeline (.github/scripts/fetch_episodes.py) writes. All new front matter fields
+(aphorism_start/end, book_section, part, short_title, quote) are OPTIONAL and the
+template degrades gracefully without them.
 {% endcomment %}
 {% assign ep_key = page.episode_number | append: "" %}
 {% assign episode_data = site.data.episodes[ep_key] %}
+{% assign book = site.data.book %}
+{% assign sec = book.sections | where: "id", page.chapter | first %}
 
 <article class="episode-detail">
-    <div class="container">
-        {% if episode_data.video_teaser %}
-        <div class="video-teaser-container">
-            <video class="episode-video-teaser" controls muted loop playsinline poster="{{ page.video_poster | default: '' }}">
-                <source src="{{ episode_data.video_teaser | relative_url }}" type="video/mp4">
-                مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
-            </video>
-            <div class="video-overlay">
-                <button class="video-play-btn" onclick="toggleVideo()" aria-label="پخش ویدیو">
-                    <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        {% endif %}
-        
-        <a href="/" class="back-link">← بازگشت به صفحه اصلی</a>
-        
-        <header class="episode-header">
-            <h1>{{ episode_data.title }}</h1>
-            <p class="episode-meta">{{ episode_data.publish_date }}</p>
-        </header>
-        
-        <div class="episode-player">
-            <audio controls class="audio-player2">
-                <source src="{{ '/assets/episodes/' | append: episode_data.audio_file | relative_url }}" type="audio/mpeg">
-                مرورگر شما از پخش صوت پشتیبانی نمی‌کند.
-            </audio>
-            <div class="episode-duration">مدت: {{ episode_data.duration }}</div>
-        </div>
-        
-        <div class="episode-content">
-            {{ content }}
-        </div>
-        
-        {% if episode_data.related_audios and episode_data.related_audios.size > 0 %}
-        <section class="related-audios">
-            <h2>صوت‌های مرتبط ذکر شده در این اپیزود</h2>
-            <div class="related-audios-list">
-                {% for audio in episode_data.related_audios %}
-                <div class="related-audio-item">
-                    <h3>{{ audio.name }}</h3>
-                    <p class="audio-author">{{ audio.author }}</p>
-                    <p class="audio-description">{{ audio.description }}</p>
-                    {% if audio.link and audio.link != "" %}
-                    <a href="{{ audio.link }}" target="_blank" class="audio-link">لینک منبع →</a>
-                    {% endif %}
-                </div>
-                {% endfor %}
-            </div>
-        </section>
-        {% endif %}
+    <div class="container episode-layout">
 
-        {% if episode_data.related_videos and episode_data.related_videos.size > 0 %}
-        <section class="related-audios">
-            <h2>پادگپ این اپیزود (مصاحبه با اهل فن)</h2>
-            <div class="related-audios-list">
-                {% for video in episode_data.related_videos %}
-                <div class="related-audio-item">
-                    <h3>{{ audio.name }}</h3>
-                    <p class="audio-author">{{ video.author }}</p>
-                    <p class="audio-description">{{ video.description }}</p>
-                    {% if video.youtube and video.youtube != "" %}
-                    <a href="{{ video.youtube }}" class="social-link instagram" target="_blank" rel="noopener">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M29.41,9.26a3.5,3.5,0,0,0-2.47-2.47C24.76,6.2,16,6.2,16,6.2s-8.76,0-10.94.59A3.5,3.5,0,0,0,2.59,9.26,36.13,36.13,0,0,0,2,16a36.13,36.13,0,0,0,.59,6.74,3.5,3.5,0,0,0,2.47,2.47C7.24,25.8,16,25.8,16,25.8s8.76,0,10.94-.59a3.5,3.5,0,0,0,2.47-2.47A36.13,36.13,0,0,0,30,16,36.13,36.13,0,0,0,29.41,9.26ZM13.2,20.2V11.8L20.47,16Z"></path>
-                        </svg>
-                        <span>لینک یوتیوب →</span>
-                    </a>
-                    {% endif %}
-                    {% if video.instagram and video.instagram != "" %}
-                    <a href="{{ video.instagram }}" class="social-link instagram" target="_blank" rel="noopener">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                        </svg>
-                        <span>لینک اینستاگرام →</span>
-                    </a>
-                    {% endif %}
-                    {% if video.aparat and video.aparat != "" %}
-                    <a href="{{ video.aparat }}" target="_blank" class="audio-link">لینک آپارات →</a>
-                    {% endif %}
-                </div>
-                {% endfor %}
+        <!-- main column -->
+        <div class="episode-main">
+            <a href="{{ '/' | relative_url }}#episodes" class="back-link">→ بازگشت به همهٔ اپیزودها</a>
+
+            <header class="episode-header">
+                <span class="ep-kicker">
+                    {%- if page.book_section == 'intro' -%}
+                        معرفی کتاب
+                    {%- elsif page.book_section == 'preface' -%}
+                        پیش‌گفتار{% if page.part %} · بخش {% include fa_num.html n=page.part %}{% endif %}
+                    {%- elsif sec -%}
+                        {{ sec.label }}: {{ sec.name }}{% if page.aphorism_start %} · قصارهای {% include fa_num.html n=page.aphorism_start %}{% if page.aphorism_end != page.aphorism_start %}–{% include fa_num.html n=page.aphorism_end %}{% endif %}{% endif %}
+                    {%- endif -%}
+                </span>
+                <h1 class="ep-title">{{ episode_data.title }}</h1>
+                <span class="ep-meta">{% include fa_num.html n=episode_data.publish_date %} · <span class="ltr">{% include duration.html d=episode_data.duration %}</span></span>
+            </header>
+
+            <!-- player -->
+            <div class="paper-card player-card">
+                {% capture ep_audio %}{{ '/assets/episodes/' | append: episode_data.audio_file | relative_url }}{% endcapture %}
+                {% include player.html src=ep_audio duration=episode_data.duration %}
             </div>
-        </section>
-        {% endif %}
-        
-        {% if page.transcript %}
-        <section class="transcript-section">
-            <div class="transcript-header" onclick="toggleTranscript()">
-                <h2>متن کامل اپیزود (Transcript)</h2>
-                <div class="transcript-toggle">
-                    <span class="toggle-text">نمایش متن</span>
-                    <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
+
+            {% assign teaser_file = site.static_files | where_exp: "f", "f.path == episode_data.video_teaser" | first %}
+            {% if teaser_file %}
+            <div class="video-teaser-container">
+                <video class="episode-video-teaser" controls muted loop playsinline poster="{{ page.video_poster | default: '' }}">
+                    <source src="{{ episode_data.video_teaser | relative_url }}" type="video/mp4">
+                    مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
+                </video>
+                <div class="video-overlay">
+                    <button class="video-play-btn" onclick="toggleVideo()" aria-label="پخش ویدیو">
+                        <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
-            <div class="transcript-content" id="transcript-content">
-                <div class="transcript-text">
-                    {% if page.transcript %}
-                        {% capture transcript_path %}_transcripts/{{ page.transcript }}{% endcapture %}
+            {% endif %}
+
+            <!-- description -->
+            <div class="episode-content">
+                {% if page.quote %}
+                <div class="naskh-quote quote-large">«{{ page.quote }}»</div>
+                {% endif %}
+                {{ content }}
+            </div>
+
+            {% if episode_data.related_videos and episode_data.related_videos.size > 0 %}
+            <section class="related-section">
+                <h2 class="section-title">پادگپ این اپیزود (مصاحبه با اهل فن)</h2>
+                <div class="related-list">
+                    {% for video in episode_data.related_videos %}
+                    <div class="paper-card related-item">
+                        {% if video.name %}<h3 class="related-name">{{ video.name }}</h3>{% endif %}
+                        {% if video.author %}<p class="related-author">{{ video.author }}</p>{% endif %}
+                        {% if video.description %}<p class="related-desc">{{ video.description }}</p>{% endif %}
+                        <div class="related-links">
+                            {% if video.youtube and video.youtube != "" %}<a href="{{ video.youtube }}" target="_blank" rel="noopener" class="gold-link">لینک یوتیوب →</a>{% endif %}
+                            {% if video.instagram and video.instagram != "" %}<a href="{{ video.instagram }}" target="_blank" rel="noopener" class="gold-link">لینک اینستاگرام →</a>{% endif %}
+                            {% if video.aparat and video.aparat != "" %}<a href="{{ video.aparat }}" target="_blank" rel="noopener" class="gold-link">لینک آپارات →</a>{% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            {% if page.transcript %}
+            <section class="transcript-section">
+                <button class="transcript-header" onclick="toggleTranscript()">
+                    <span class="transcript-title">متن کامل اپیزود</span>
+                    <span class="transcript-toggle">
+                        <span class="toggle-text">نمایش</span>
+                        <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </span>
+                </button>
+                <div class="transcript-content" id="transcript-content">
+                    <div class="transcript-text">
                         {% for transcript in site.transcripts %}
                             {% if transcript.path contains page.transcript %}
                                 {{ transcript.content | markdownify }}
                             {% endif %}
                         {% endfor %}
-                    {% endif %}
+                    </div>
                 </div>
+            </section>
+            {% endif %}
+        </div>
+
+        <!-- sidebar -->
+        <aside class="episode-sidebar">
+            <div class="paper-card flat-card meta-card">
+                <span class="card-kicker">مشخصات اپیزود</span>
+                <div class="meta-row"><span class="meta-label">فصل</span><span class="meta-value">
+                    {%- if page.book_section == 'intro' -%}معرفی کتاب
+                    {%- elsif page.book_section == 'preface' -%}پیش‌گفتار
+                    {%- elsif sec -%}{{ sec.label | remove: 'فصل ' }}: {{ sec.name }}
+                    {%- else -%}—
+                    {%- endif -%}
+                </span></div>
+                {% if page.aphorism_start %}
+                <div class="meta-row"><span class="meta-label">قصارها</span><span class="meta-value">{% include fa_num.html n=page.aphorism_start %}{% if page.aphorism_end != page.aphorism_start %} و {% include fa_num.html n=page.aphorism_end %}{% endif %}</span></div>
+                {% endif %}
+                <div class="meta-row"><span class="meta-label">مدت</span><span class="meta-value ltr">{% include duration.html d=episode_data.duration %}</span></div>
+                <div class="meta-row last"><span class="meta-label">انتشار</span><span class="meta-value">{% include fa_num.html n=episode_data.publish_date %}</span></div>
             </div>
-        </section>
-        {% endif %}
+
+            {% if episode_data.related_audios and episode_data.related_audios.size > 0 %}
+            <div class="paper-card flat-card music-card">
+                <span class="card-kicker">{% if episode_data.related_audios.size == 1 %}موسیقی این اپیزود{% else %}موسیقی و صوت‌های این اپیزود{% endif %}</span>
+                {% for audio in episode_data.related_audios %}
+                <div class="music-item{% if forloop.last %} last{% endif %}">
+                    <span class="music-name">{{ audio.name }}</span>
+                    {% if audio.author and audio.author != "" %}<span class="music-author">{{ audio.author }}</span>{% endif %}
+                    {% if audio.description and audio.description != "" %}<span class="music-desc">{{ audio.description }}</span>{% endif %}
+                    {% if audio.link and audio.link != "" %}<a href="{{ audio.link }}" target="_blank" rel="noopener" class="gold-link">لینک منبع →</a>{% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="paper-card flat-card journey-card">
+                <span class="card-kicker">ادامهٔ سفر</span>
+                {% if page.previous %}
+                {% assign prev_key = page.previous.episode_number | append: "" %}
+                {% assign prev_data = site.data.episodes[prev_key] %}
+                <a href="{{ page.previous.url | relative_url }}" class="journey-item">
+                    <span class="journey-label">اپیزود قبلی</span>
+                    <span class="journey-title">{% include ep_num.html n=page.previous.episode_number %} · {{ page.previous.short_title | default: prev_data.title | truncate: 60 }}</span>
+                </a>
+                {% endif %}
+                {% if page.next %}
+                {% assign next_key = page.next.episode_number | append: "" %}
+                {% assign next_data = site.data.episodes[next_key] %}
+                <a href="{{ page.next.url | relative_url }}" class="journey-item">
+                    <span class="journey-label">اپیزود بعدی</span>
+                    <span class="journey-title">{% include ep_num.html n=page.next.episode_number %} · {{ page.next.short_title | default: next_data.title | truncate: 60 }}</span>
+                </a>
+                {% else %}
+                <div class="journey-item journey-soon">
+                    <span class="journey-label">اپیزود بعدی</span>
+                    <span class="journey-soon-text">به‌زودی…</span>
+                </div>
+                {% endif %}
+            </div>
+        </aside>
     </div>
 </article>

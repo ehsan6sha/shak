@@ -1,0 +1,64 @@
+# ساختار کتاب «فراسوی نیک و بد» — منبع دادهٔ فهرست کتاب، نوار پیشرفت و کاوشگر قصارها
+# total_aphorisms: تعداد کل قصارهای کتاب
+total_aphorisms: 296
+
+sections:
+  - id: 0
+    key: preface
+    label: "پیش‌گفتار"
+    name: "پیش‌گفتار"
+    num_label: "—"
+  - id: 1
+    key: ch1
+    label: "فصل اول"
+    name: "تعصبات فیلسوفان"
+    from: 1
+    to: 23
+  - id: 2
+    key: ch2
+    label: "فصل دوم"
+    name: "روح آزاد"
+    from: 24
+    to: 44
+  - id: 3
+    key: ch3
+    label: "فصل سوم"
+    name: "جوهر دینی"
+    from: 45
+    to: 62
+  - id: 4
+    key: ch4
+    label: "فصل چهارم"
+    name: "گزین‌گویه‌ها"
+    from: 63
+    to: 185
+  - id: 5
+    key: ch5
+    label: "فصل پنجم"
+    name: "تاریخ طبیعی اخلاق"
+    from: 186
+    to: 203
+  - id: 6
+    key: ch6
+    label: "فصل ششم"
+    name: "ما دانشوران"
+    from: 204
+    to: 213
+  - id: 7
+    key: ch7
+    label: "فصل هفتم"
+    name: "فضیلت‌های ما"
+    from: 214
+    to: 239
+  - id: 8
+    key: ch8
+    label: "فصل هشتم"
+    name: "مردمان و میهن‌ها"
+    from: 240
+    to: 256
+  - id: 9
+    key: ch9
+    label: "فصل نهم"
+    name: "والا چیست؟"
+    from: 257
+    to: 296

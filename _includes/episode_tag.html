@@ -1,0 +1,10 @@
+{%- comment -%} Short tag for an episode row/card, e.g. «فصل ۲ · قصار ۲۷–۲۸» / «پیش‌گفتار (۱)» / «معرفی کتاب». Usage: {% include episode_tag.html post=post %} {%- endcomment -%}
+{%- if include.post.book_section == 'intro' -%}
+معرفی کتاب
+{%- elsif include.post.book_section == 'preface' -%}
+پیش‌گفتار{% if include.post.part %} ({% include fa_num.html n=include.post.part %}){% endif %}
+{%- elsif include.post.aphorism_start -%}
+فصل {% include fa_num.html n=include.post.chapter %} · قصار {% include fa_num.html n=include.post.aphorism_start %}{% if include.post.aphorism_end and include.post.aphorism_end != include.post.aphorism_start %}–{% include fa_num.html n=include.post.aphorism_end %}{% endif %}
+{%- elsif include.post.chapter -%}
+فصل {% include fa_num.html n=include.post.chapter %}
+{%- endif -%}

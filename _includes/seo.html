@@ -92,7 +92,7 @@
 {
   "@context": "https://schema.org",
   "@type": "PodcastEpisode",
-  "episodeNumber": {{ page.episode_number }},
+  "episodeNumber": {{ page.episode_number | jsonify }},
   "name": {{ episode_data.title | jsonify }},
   "description": {{ episode_data.description | jsonify }},
   "datePublished": "{{ page.date | date_to_xmlschema }}",

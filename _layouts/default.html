@@ -3,21 +3,31 @@
 <head>
     <!-- SEO and Meta Tags -->
     {% include seo.html %}
-    
-    <!-- Vazirmatn Font -->
+
+    <!-- Fonts: Vazirmatn (UI) + Noto Naskh Arabic (serif display) -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-naskh-arabic@5/400.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-naskh-arabic@5/700.css">
+
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
-    
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ '/assets/images/favicon.svg' | relative_url }}">
     <link rel="apple-touch-icon" href="{{ '/assets/images/logo.webp' | relative_url }}">
 </head>
 <body>
-    {{ content }}
-    
+    {% include header.html %}
+
+    <main>
+        {{ content }}
+    </main>
+
+    {% include footer.html %}
+    {% include sticky_player.html %}
+
     <!-- Custom JavaScript -->
-    <script src="{{ '/assets/js/player.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/player.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
 </body>
 </html>

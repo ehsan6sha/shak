@@ -14,10 +14,29 @@ about_philosophy: "نیچه خطرناک است. نه به این خاطر که 
 # Social & Platform Links
 instagram: "https://instagram.com/shakpodcast"
 telegram: "https://t.me/shakpodcast"
+x_twitter: "https://x.com/podcastshak"
+youtube_channel: "https://youtube.com/@podcastshak"
 spotify: "https://open.spotify.com/show/0jE9TiCFuTdPbT435gRR8d"
 apple_podcasts: "https://podcasts.apple.com/us/podcast/پادکست-شک/id1847170622"
 castbox: "https://castbox.fm/va/6789237"
 rss_feed: "https://anchor.fm/s/10aa6fc9c/podcast/rss"
+
+# Listening platforms (hero pills, ordered)
+platforms:
+  - name: "اسپاتیفای"
+    url: "https://open.spotify.com/show/0jE9TiCFuTdPbT435gRR8d"
+  - name: "اپل پادکست"
+    url: "https://podcasts.apple.com/us/podcast/پادکست-شک/id1847170622"
+  - name: "کست‌باکس"
+    url: "https://castbox.fm/va/6789237"
+  - name: "شنوتو"
+    url: "https://shenoto.com/channel/podcast/%D9%BE%D8%A7%D8%AF%DA%A9%D8%B3%D8%AA-%D8%B4%DA%A9-feed"
+  - name: "یوتیوب"
+    url: "https://music.youtube.com/playlist?list=PLRkRvMigG8Y6MjRmwUNUIxZvQggL0b43t&si=-0q5njM4oLoUvuaQ"
+  - name: "آودیبل"
+    url: "https://www.audible.ca/pd/B0FX12MS1Y?source_code=ASSOR150021221000N"
+  - name: "RSS"
+    url: "https://anchor.fm/s/10aa6fc9c/podcast/rss"
 
 # Build settings
 markdown: kramdown

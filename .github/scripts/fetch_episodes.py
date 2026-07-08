@@ -27,6 +27,82 @@ POSTS_DIR.mkdir(parents=True, exist_ok=True)
 ASSETS_DIR.mkdir(parents=True, exist_ok=True)
 
 
+# Translate Persian/Arabic-Indic digits to Latin
+PERSIAN_DIGITS = str.maketrans('۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', '01234567890123456789')
+
+# Persian ordinal words → numbers (for chapters and preface parts)
+ORDINAL_WORDS = {
+    'اول': 1, 'یکم': 1, 'دوم': 2, 'سوم': 3, 'چهارم': 4, 'پنجم': 5,
+    'ششم': 6, 'هفتم': 7, 'هشتم': 8, 'نهم': 9, 'دهم': 10,
+}
+
+# Aphorism ranges per chapter of "Beyond Good and Evil" (mirrors _data/book.yml)
+BGE_CHAPTERS = [
+    (1, 1, 23), (2, 24, 44), (3, 45, 62), (4, 63, 185), (5, 186, 203),
+    (6, 204, 213), (7, 214, 239), (8, 240, 256), (9, 257, 296),
+]
+
+
+def chapter_for_aphorism(n):
+    """Map an aphorism number to its book chapter."""
+    for ch, start, end in BGE_CHAPTERS:
+        if start <= n <= end:
+            return ch
+    return None
+
+
+def extract_book_metadata(title):
+    """Best-effort extraction of book metadata (aphorism range, chapter,
+    preface part) from a Persian episode title. Returns a dict of optional
+    front matter fields; ambiguous titles yield fewer fields (the site
+    templates degrade gracefully when fields are absent).
+
+    Examples it understands:
+      "اپیزود یازدهم: جملات قصار 20 تا 23 از فصل اول. ..."
+      "اپیزود دوازدهم (بخش اول): قصارهای ۲۴ و ۲۵ - ..."
+      "اپیزود دوم: پیش گفتار، بخش اول - ..."
+    """
+    t = title.translate(PERSIAN_DIGITS)
+    meta = {}
+
+    # Preface episodes ("پیش گفتار" / "پیش‌گفتار" with optional ZWNJ)
+    if re.search(r'پیش[\s‌]*گفتار', t):
+        meta['book_section'] = 'preface'
+        m = re.search(r'بخش\s+([^\s،:.-]+)', t)
+        if m:
+            word = m.group(1)
+            if word.isdigit():
+                meta['part'] = int(word)
+            elif word in ORDINAL_WORDS:
+                meta['part'] = ORDINAL_WORDS[word]
+        return meta
+
+    # Aphorism range: "قصارهای 27 و 28" / "جملات قصار 20 تا 23" / "قصار 25"
+    m = re.search(r'قصار\S*\s*(\d+)\s*(?:(?:و|تا|الی|[-–])\s*(\d+))?', t)
+    if m:
+        meta['aphorism_start'] = int(m.group(1))
+        meta['aphorism_end'] = int(m.group(2)) if m.group(2) else int(m.group(1))
+
+    # Chapter: "از فصل اول" / "فصل 2"
+    m = re.search(r'فصل\s+([^\s،:.-]+)', t)
+    if m:
+        word = m.group(1)
+        if word.isdigit():
+            ch = int(word)
+            if 1 <= ch <= 9:
+                meta['chapter'] = ch
+        elif word in ORDINAL_WORDS and ORDINAL_WORDS[word] <= 9:
+            meta['chapter'] = ORDINAL_WORDS[word]
+
+    # Derive chapter from aphorism range when the title doesn't state it
+    if 'chapter' not in meta and 'aphorism_start' in meta:
+        ch = chapter_for_aphorism(meta['aphorism_start'])
+        if ch:
+            meta['chapter'] = ch
+
+    return meta
+
+
 def extract_episode_number(title):
     """Extract episode number from title."""
     # Try Persian numbers first
@@ -208,10 +284,16 @@ def create_episode_files(entry, episode_number):
     
     # Only create post if it doesn't exist (to preserve manual content)
     if not post_file.exists():
+        # Optional book metadata parsed from the title (chapter, aphorism
+        # range, preface part) — consumed by the site's TOC, aphorism
+        # explorer and archive tabs. Missing fields degrade gracefully.
+        book_meta = extract_book_metadata(entry.title)
+        book_meta_yaml = ''.join(f"{key}: {value}\n" for key, value in book_meta.items())
+
         post_content = f"""---
 layout: post
 episode_number: {episode_number}
----
+{book_meta_yaml}---
 
 {description_md[:500]}...
 

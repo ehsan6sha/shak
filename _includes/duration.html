@@ -1,0 +1,5 @@
+{%- comment -%} Persian duration: strips a leading "00:" then converts digits. Usage: {% include duration.html d=episode.duration %} {%- endcomment -%}
+{%- assign dur_v = include.d | append: '' -%}
+{%- assign dur_head = dur_v | slice: 0, 3 -%}
+{%- if dur_head == '00:' -%}{%- assign dur_v = dur_v | slice: 3, 20 -%}{%- endif -%}
+{%- include fa_num.html n=dur_v -%}

@@ -1,0 +1,2 @@
+{%- comment -%} Episode display number: "12-2" → ۱۲/۲ . Usage: {% include ep_num.html n=post.episode_number %} {%- endcomment -%}
+{%- assign ep_num_v = include.n | append: '' | replace: '-','/' -%}{%- include fa_num.html n=ep_num_v -%}
