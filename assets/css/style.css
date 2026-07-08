@@ -28,6 +28,8 @@
 
 html { -webkit-text-size-adjust: 100%; }
 
+html, body { overflow-x: clip; }
+
 body {
     margin: 0;
     background: var(--bg);
@@ -36,6 +38,13 @@ body {
     line-height: 1.9;
     -webkit-font-smoothing: antialiased;
 }
+
+/* grid children must not blow out their track (RTL nowrap rows) */
+.hero-grid > *,
+.toc-grid > *,
+.aph-grid > *,
+.about-grid > *,
+.episode-layout > * { min-width: 0; }
 
 img { max-width: 100%; }
 
@@ -241,7 +250,7 @@ section[id] { scroll-margin-top: 84px; }
     max-width: 460px;
 }
 
-.platform-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.platform-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; max-width: 100%; }
 
 .pill {
     display: inline-flex;

@@ -30,7 +30,7 @@ template degrades gracefully without them.
                         {{ sec.label }}: {{ sec.name }}{% if page.aphorism_start %} · قصارهای {% include fa_num.html n=page.aphorism_start %}{% if page.aphorism_end != page.aphorism_start %}–{% include fa_num.html n=page.aphorism_end %}{% endif %}{% endif %}
                     {%- endif -%}
                 </span>
-                <h1 class="ep-title">{{ episode_data.title }}</h1>
+                <h1 class="ep-title">{% include fa_num.html n=episode_data.title %}</h1>
                 <span class="ep-meta">{% include fa_num.html n=episode_data.publish_date %} · <span class="ltr">{% include duration.html d=episode_data.duration %}</span></span>
             </header>
 
@@ -132,7 +132,7 @@ template degrades gracefully without them.
                 <span class="card-kicker">{% if episode_data.related_audios.size == 1 %}موسیقی این اپیزود{% else %}موسیقی و صوت‌های این اپیزود{% endif %}</span>
                 {% for audio in episode_data.related_audios %}
                 <div class="music-item{% if forloop.last %} last{% endif %}">
-                    <span class="music-name">{{ audio.name }}</span>
+                    <span class="music-name">{% include fa_num.html n=audio.name %}</span>
                     {% if audio.author and audio.author != "" %}<span class="music-author">{{ audio.author }}</span>{% endif %}
                     {% if audio.description and audio.description != "" %}<span class="music-desc">{{ audio.description }}</span>{% endif %}
                     {% if audio.link and audio.link != "" %}<a href="{{ audio.link }}" target="_blank" rel="noopener" class="gold-link">لینک منبع →</a>{% endif %}

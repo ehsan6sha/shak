@@ -294,7 +294,7 @@ function initExplorer() {
         const link = document.getElementById('aph-card-link');
 
         if (badge) badge.textContent = badgeOf(e);
-        if (title) title.textContent = e.title;
+        if (title) title.textContent = faNum(e.title);
         if (desc) desc.textContent = e.desc;
         if (meta) meta.textContent = sectionLabelOf(e) + ' · ' + faDur(e.dur) + ' · ' + faNum(e.date);
         if (play) play.onclick = function () { playEpisode(e.audio, e.fullTitle); };

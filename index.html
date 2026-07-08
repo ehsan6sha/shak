@@ -36,11 +36,11 @@ description: "پادکست شک - پادکست فارسی فلسفه و فردر
                 <span class="card-kicker">جدیدترین اپیزود{% if latest.book_section %} · پیش‌گفتار{% elsif latest_sec %} · {{ latest_sec.label }}: {{ latest_sec.name }}{% endif %}</span>
                 <span class="card-side">{% if latest.aphorism_start %}قصارهای {% include fa_num.html n=latest.aphorism_start %}{% if latest.aphorism_end != latest.aphorism_start %}–{% include fa_num.html n=latest.aphorism_end %}{% endif %}{% else %}{% include episode_tag.html post=latest %}{% endif %}</span>
             </div>
-            <h2 class="hero-card-title">{{ latest_episode.title }}</h2>
+            <h2 class="hero-card-title">{% include fa_num.html n=latest_episode.title %}</h2>
             {% if latest.quote %}
             <div class="naskh-quote">«{{ latest.quote }}»</div>
             {% else %}
-            <div class="naskh-quote">{{ latest.excerpt | strip_html | normalize_whitespace | truncate: 140 }}</div>
+            <div class="naskh-quote">{{ latest.excerpt | markdownify | strip_html | normalize_whitespace | truncate: 140 }}</div>
             {% endif %}
             {% capture latest_audio %}{{ '/assets/episodes/' | append: latest_episode.audio_file | relative_url }}{% endcapture %}
             {% include player.html src=latest_audio duration=latest_episode.duration %}
@@ -104,7 +104,7 @@ description: "پادکست شک - پادکست فارسی فلسفه و فردر
         <div class="paper-card aph-card" id="aph-card">
             <span class="card-kicker" id="aph-card-badge">{% if latest.aphorism_start %}قصار {% include fa_num.html n=latest.aphorism_start %}{% if latest.aphorism_end != latest.aphorism_start %}–{% include fa_num.html n=latest.aphorism_end %}{% endif %}{% else %}{% include episode_tag.html post=latest %}{% endif %}</span>
             <div class="aph-card-title" id="aph-card-title">{{ latest.short_title | default: latest_episode.title }}</div>
-            <div class="aph-card-desc" id="aph-card-desc">{{ latest.excerpt | strip_html | normalize_whitespace | truncate: 180 }}</div>
+            <div class="aph-card-desc" id="aph-card-desc">{{ latest.excerpt | markdownify | strip_html | normalize_whitespace | truncate: 180 }}</div>
             <div class="aph-card-meta" id="aph-card-meta">{% if latest.book_section %}پیش‌گفتار{% elsif latest_sec %}{{ latest_sec.label }}{% endif %} · {% include duration.html d=latest_episode.duration %} · {% include fa_num.html n=latest_episode.publish_date %}</div>
             <div class="aph-card-actions">
                 <button class="btn-solid" id="aph-card-play" onclick="playEpisode('{{ latest_audio | strip }}', '{{ latest_episode.title | escape }}')">
@@ -214,7 +214,7 @@ description: "پادکست شک - پادکست فارسی فلسفه و فردر
       "audio": {{ '/assets/episodes/' | append: d.audio_file | relative_url | jsonify }},
       "title": {{ post.short_title | default: d.title | jsonify }},
       "fullTitle": {{ d.title | jsonify }},
-      "desc": {{ post.excerpt | strip_html | normalize_whitespace | truncate: 180 | jsonify }},
+      "desc": {{ post.excerpt | markdownify | strip_html | normalize_whitespace | truncate: 180 | jsonify }},
       "dur": {{ d.duration | jsonify }},
       "date": {{ d.publish_date | jsonify }},
       "chapter": {{ post.chapter | default: 'null' }},
@@ -227,4 +227,5 @@ description: "پادکست شک - پادکست فارسی فلسفه و فردر
   ]
 }
 {% endcapture %}
-<script type="application/json" id="shak-data">{{ shak_data | replace: '</', '<\/' }}</script>
+{% comment %} Escaping '<' as \\u003c makes the JSON inert inside HTML (no script-closing or comment sequences can appear); JSON.parse decodes it back. {% endcomment %}
+<script type="application/json" id="shak-data">{{ shak_data | replace: '<', '\u003c' }}</script>

@@ -119,49 +119,59 @@ EPISODE_ORDINALS = {
 PART_WORDS = {'اول': 1, 'یکم': 1, 'دوم': 2, 'سوم': 3, 'چهارم': 4, 'پنجم': 5}
 
 
-def extract_episode_number(title):
-    """Extract the episode number from a Persian title.
+# Separators allowed between the episode designation and its "بخش" part
+# marker (space, ZWNJ, kasra, dash, parentheses, comma)
+SEP = r'[\s‌ِ\-–—(),،]'
 
-    Returns an int (e.g. 13), a string for multi-part episodes (e.g. "13-1"
-    from "اپیزود سیزدهم (بخش اول)"), or None when no number can be determined
-    CONFIDENTLY. There is deliberately no "first number in the title"
-    fallback: guessing used to pick up aphorism numbers ("قصار 27") and
-    created duplicate episodes (e.g. episode-27 duplicating episode 13-1).
-    Unparseable entries are skipped with a warning instead.
+
+def extract_episode_number(title):
+    """Extract the episode number from a Persian title, always as a string
+    (e.g. "13", or "13-1" for multi-part titles like "اپیزود سیزدهم (بخش اول)").
+
+    Returns None when no number can be determined CONFIDENTLY. There is
+    deliberately no "first number in the title" fallback: guessing used to
+    pick up aphorism numbers ("قصار 27") and created duplicate episodes
+    (e.g. episode-27 duplicating episode 13-1). Unparseable entries are
+    skipped with a warning instead.
     """
     t = title.translate(PERSIAN_DIGITS)
 
-    # Base number: digits or ordinal word after اپیزود/قسمت
+    # Base number: digits or ordinal word after اپیزود/قسمت. The (?!\w)
+    # guard stops ordinals matching inside longer words (اول in اولین).
     num = None
+    num_end = None
     m = re.search(r'(?:اپیزود|قسمت)\s*(\d+)', t)
     if m:
         num = int(m.group(1))
+        num_end = m.end()
     else:
         for word in sorted(EPISODE_ORDINALS, key=len, reverse=True):
-            if re.search(r'(?:اپیزود|قسمت)\s+' + re.escape(word), t):
+            m = re.search(r'(?:اپیزود|قسمت)\s*' + re.escape(word) + r'(?!\w)', t)
+            if m:
                 num = EPISODE_ORDINALS[word]
+                num_end = m.end()
                 break
 
     if num is None:
         return None
 
-    # Part suffix ("بخش اول" → -1) — only when it appears BEFORE the first
-    # colon, i.e. attached to the episode designation itself. Preface
-    # episodes like "اپیزود دوم: پیش گفتار، بخش اول" keep their plain number
-    # because there بخش comes after the colon.
-    head = re.split(r'[:：]', t, maxsplit=1)[0]
+    # Part suffix ("بخش اول" → -1) — only when بخش is ADJACENT to the episode
+    # designation (nothing but separators in between), e.g.
+    # "اپیزود دوازدهم-بخش اول: ..." or "اپیزود سیزدهم (بخش اول): ...".
+    # Preface episodes like "اپیزود دوم: پیش گفتار، بخش اول" keep their plain
+    # number because other words sit between the designation and بخش.
     part = None
-    m = re.search(r'بخش\s*(\d+)', head)
+    m = re.match(SEP + r'*بخش' + SEP + r'*(\d+)', t[num_end:])
     if m:
         part = int(m.group(1))
     else:
-        m = re.search(r'بخش\s+([^\s()،:.«»-]+)', head)
+        m = re.match(SEP + r'*بخش' + SEP + r'+([^\s()،:.«»\-–—]+)', t[num_end:])
         if m and m.group(1) in PART_WORDS:
             part = PART_WORDS[m.group(1)]
 
     if part is not None:
         return f"{num}-{part}"
-    return num
+    return str(num)
 
 
 def convert_html_to_markdown(html_content):
