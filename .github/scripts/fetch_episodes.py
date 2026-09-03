@@ -126,7 +126,8 @@ SEP = r'[\s‌ِ\-–—(),،]'
 
 def extract_episode_number(title):
     """Extract the episode number from a Persian title, always as a string
-    (e.g. "13", or "13-1" for multi-part titles like "اپیزود سیزدهم (بخش اول)").
+    (e.g. "13", or "13-1"/"13-2" for multi-part titles like
+    "اپیزود سیزدهم (بخش اول)" or "اپیزود ۱۳، قسمت دوم").
 
     Returns None when no number can be determined CONFIDENTLY. There is
     deliberately no "first number in the title" fallback: guessing used to
@@ -140,14 +141,17 @@ def extract_episode_number(title):
     # guard stops ordinals matching inside longer words (اول in اولین).
     num = None
     num_end = None
-    m = re.search(r'(?:اپیزود|قسمت)\s*(\d+)', t)
+    designator = None
+    m = re.search(r'(اپیزود|قسمت)\s*(\d+)', t)
     if m:
-        num = int(m.group(1))
+        designator = m.group(1)
+        num = int(m.group(2))
         num_end = m.end()
     else:
         for word in sorted(EPISODE_ORDINALS, key=len, reverse=True):
-            m = re.search(r'(?:اپیزود|قسمت)\s*' + re.escape(word) + r'(?!\w)', t)
+            m = re.search(r'(اپیزود|قسمت)\s*' + re.escape(word) + r'(?!\w)', t)
             if m:
+                designator = m.group(1)
                 num = EPISODE_ORDINALS[word]
                 num_end = m.end()
                 break
@@ -155,17 +159,22 @@ def extract_episode_number(title):
     if num is None:
         return None
 
-    # Part suffix ("بخش اول" → -1) — only when بخش is ADJACENT to the episode
-    # designation (nothing but separators in between), e.g.
-    # "اپیزود دوازدهم-بخش اول: ..." or "اپیزود سیزدهم (بخش اول): ...".
+    # Part suffix ("بخش اول" → -1, "قسمت دوم" → -2) — only when the marker is
+    # ADJACENT to the episode designation (nothing but separators in between),
+    # e.g. "اپیزود دوازدهم-بخش اول: ...", "اپیزود سیزدهم (بخش اول): ..." or
+    # "... | اپیزود ۱۳، قسمت دوم".
     # Preface episodes like "اپیزود دوم: پیش گفتار، بخش اول" keep their plain
-    # number because other words sit between the designation and بخش.
+    # number because other words sit between the designation and the marker.
+    # قسمت counts as a part marker ONLY when the number came from اپیزود: when
+    # قسمت itself supplied the number it means "episode", not "part", so a
+    # second قسمت after it must not be swallowed as a suffix.
+    part_marker = r'(?:بخش|قسمت)' if designator == 'اپیزود' else r'بخش'
     part = None
-    m = re.match(SEP + r'*بخش' + SEP + r'*(\d+)', t[num_end:])
+    m = re.match(SEP + r'*' + part_marker + SEP + r'*(\d+)', t[num_end:])
     if m:
         part = int(m.group(1))
     else:
-        m = re.match(SEP + r'*بخش' + SEP + r'+([^\s()،:.«»\-–—]+)', t[num_end:])
+        m = re.match(SEP + r'*' + part_marker + SEP + r'+([^\s()،:.«»\-–—]+)', t[num_end:])
         if m and m.group(1) in PART_WORDS:
             part = PART_WORDS[m.group(1)]
 
